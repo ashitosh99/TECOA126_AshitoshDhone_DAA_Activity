@@ -1,0 +1,133 @@
+3.Matrix Layer Rotation
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+You are given a 2D matrix of dimension m x n and a positive integer r . You have to rotate the matrix r times and print the resultant matrix. 
+Rotation should be in anti-clockwise direction.
+
+It is guaranteed that the minimum of m and n will be even.
+
+As an example rotate the Start matrix by 2:
+
+Start         First           Second
+ 1 2 3 4        2  3  4  5      3  4  5  6
+12 1 2 5  ->   1  2  3  6 ->   2  3  4  7
+11 4 3 6      12  1  4  7       1  2  1  8
+10 9 8 7      11 10  9  8     12 11 10  9
+
+
+Function Description
+
+Complete the matrixRotation function in the editor below. It should print the resultant 2D integer array and return nothing.
+
+matrixRotation has the following parameter(s):
+
+matrix: a 2D array of integers
+r: an integer that represents the rotation factor
+Input Format
+
+The first line contains three space separated integers, m, n, and r, the number of rows and columns in matrix, and the required rotation.
+The next m lines contain n space-separated integers representing the elements of a row of matrix .
+
+Constraints
+2<=m,n<=300
+1<=r<=10^9
+min(m,n)%2=0
+
+
+Output Format
+
+Print each row of the rotated matrix as space-separated integers on separate lines.
+
+Sample Input
+
+Sample Input #01
+
+4 4 2
+1 2 3 4
+5 6 7 8
+9 10 11 12
+13 14 15 16
+
+Sample Output #01
+
+3 4 8 12
+2 11 10 16
+1 7 6 15
+5 9 13 14
+
+Explanation #01
+
+The matrix is rotated through two rotations.
+
+ 1  2  3  4      2  3  4  8      3  4  8 12
+ 5  6  7  8      1  7 11 12      2 11 10 16
+ 9 10 11 12  ->  5  6 10 16  ->  1  7  6 15
+13 14 15 16      9 13 14 15      5  9 13 14
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+code:
+
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+
+# Complete the matrixRotation function below.
+def matrixRotation(matrix, r):
+    n=len(matrix)
+    m=len(matrix[0])
+    a=min(n//2,m//2)
+    for i in range(a):
+        k=2*(n-2*i)+2*(m-2*i-2)
+        k=r%k
+        l=[]
+        for j in range(i,m-i):
+            l.append(matrix[i][j])
+        for j in range(i+1,n-i-1):
+            l.append(matrix[j][-1-i])
+        for j in range(-1-i,-1*m+i-1,-1):
+            l.append(matrix[-1-i][j])
+        for j in range(-1-i-1,n*-1+i,-1):
+            l.append(matrix[j][i])
+        l=l[k:]+l[:k]
+        flag=0
+        for j in range(i,m-i):
+            matrix[i][j]=l[flag]
+            flag+=1
+        for j in range(i+1,n-i-1):
+            matrix[j][-1-i]=l[flag]
+            flag+=1
+        for j in range(-1-i,-1*m+i-1,-1):
+            matrix[-1-i][j]=l[flag]
+            flag+=1
+        for j in range(-1-i-1,n*-1+i,-1):
+            matrix[j][i]=l[flag]
+            flag+=1
+    for i in matrix:
+        for j in i:
+            print(j,end=" ")
+        print()
+        
+
+
+
+if __name__ == '__main__':
+    mnr = input().rstrip().split()
+
+    m = int(mnr[0])
+
+    n = int(mnr[1])
+
+    r = int(mnr[2])
+
+    matrix = []
+
+    for _ in range(m):
+        matrix.append(list(map(int, input().rstrip().split())))
+
+    matrixRotation(matrix, r)
